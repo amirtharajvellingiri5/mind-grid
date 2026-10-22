@@ -73,7 +73,7 @@ def answer(question: str, k: int | None = None) -> Answer:
 
         chunks = retrieve(question, k)
         user_msg = f"Sources:\n{build_context(chunks)}\n\nQuestion: {question}"
-        text = complete(SYSTEM_PROMPT, user_msg)
+        text, model = complete(SYSTEM_PROMPT, user_msg)
         citations = extract_citations(text, chunks)
 
         span.set_attribute("output.value", text)
@@ -82,6 +82,6 @@ def answer(question: str, k: int | None = None) -> Answer:
             answer=text,
             citations=citations,
             retrieved=chunks,
-            model=settings.llm_model,
+            model=model,
             latency_ms=int((time.perf_counter() - t0) * 1000),
         )

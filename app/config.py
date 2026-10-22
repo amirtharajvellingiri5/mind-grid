@@ -17,5 +17,8 @@ class Settings(BaseSettings):
     otel_endpoint: str = "http://localhost:6006/v1/traces"
     top_k: int = 5
 
+    # origins allowed to call the API from a browser (the React UI in ui/)
+    cors_origins: list[str] = ["http://localhost:5173"]
+
 
 settings = Settings()

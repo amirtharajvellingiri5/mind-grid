@@ -1,9 +1,11 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 from app import rag
+from app.config import settings
 from app.db import close_pool, open_pool, pool
 from app.models import Answer, AskRequest
 from app.tracing import setup_tracing
@@ -20,6 +22,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="GridMind", lifespan=lifespan)
+app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origins, allow_methods=["GET", "POST"], allow_headers=["Content-Type"])
 FastAPIInstrumentor.instrument_app(app, tracer_provider=provider)
 
 
